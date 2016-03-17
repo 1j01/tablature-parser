@@ -1,0 +1,41 @@
+{
+  "name": "tablature-parser",
+  "version": "0.1.0",
+  "author": "Isaiah Odhner <isaiahodhner@gmail.com>",
+  "description": "Parse guitar tabs",
+  "keywords": [
+    "tablature",
+    "tableture",
+    "tabs",
+    "tab",
+    "tab-parser",
+    "tablature-parser",
+    "parse-tabs",
+    "parse-tablature",
+    "parse",
+    "parser",
+    "guitar",
+    "guitar-tabs",
+    "guitar-tablature",
+    "music",
+    "songs",
+    "song",
+    "ascii",
+    "ascii-tabs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1j01/tablature-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1j01/tablature-parser/issues"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coffee-script": "^1.10.0",
+    "mocha": "^2.4.5"
+  }
+}
