@@ -132,35 +132,33 @@ parseTabs = (str)->
 		cont = yes
 		while cont
 			cont = no
+			multi_digit = no
 			chord = []
+			
 			for s, noteString of noteStrings
 				ch = noteString[pos]
 				ch2 = noteString[pos+1]
-				if ch
-					cont = yes
-					if ch.match /\d/
-						if ch2?.match /\d/
-							isProbablyMultiDigit = yes
-							if isProbablyMultiDigit
-								chord.push
-									f: parseInt(ch+ch2)
-									s: tuning.indexOf(s)
-								
-								pos++
-							else
-								chord.push
-									f: parseInt(ch)
-									s: tuning.indexOf(s)
-							
-						else
-							chord.push
-								f: parseInt(ch)
-								s: tuning.indexOf(s)
+				cont = yes if ch?
+				multi_digit = yes if ch?.match(/\d/) and ch2?.match(/\d/)
+			
+			for s, noteString of noteStrings
+				ch = noteString[pos]
+				ch2 = noteString[pos+1]
+				if ch?.match(/\d/) or (multi_digit and ch2?.match(/\d/))
+					if ch2?.match(/\d/)
+						chord.push
+							f: if ch is "-" then parseInt(ch2) else parseInt(ch + ch2)
+							s: tuning.indexOf(s)
+					else
+						chord.push
+							f: parseInt(ch)
+							s: tuning.indexOf(s)
 			
 			if chord.length > 0
 				notes.push(chord)
 			
 			pos++
+			pos++ if multi_digit
 	
 	
 	if notes.length is 0
