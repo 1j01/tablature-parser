@@ -115,7 +115,7 @@ describe "the tab parser", ->
 				[s: 1, f: 0]
 			]
 	
-	it.skip "should parse a block without any string names as EADGBe", ->
+	it.skip "should treat a block with 6 unnamed strings as EADGBe by default", ->
 		parse """
 			---
 			-1-
@@ -128,13 +128,124 @@ describe "the tab parser", ->
 				[s: 1, f: 1]
 			]
 	
-	it "should parse blocks following a block with string names as the same as the above"
-	it "should parse or throw an error at other tunings"
-	it "should throw an error when no blocks are found"
-	it "should throw an error when a block doesn't line up (or actually... see the next test)"
+	it.skip "should treat a block with 4 unnamed strings as EADG by default", ->
+		parse """
+			---
+			-1-
+			---
+			---
+		""", to:
+			[
+				[s: 1, f: 1]
+			]
 	
-	it "should ignore text above, below, and beside blocks"
-	it "should ignore various articulations like bends and hammer-ons (for now at least)"
+	it.skip "should treat a block without any string names as the same as any blocks above", ->
+		parse """
+			e -------------------------5-7-9--
+			B --------------------5-6-8-------
+			G ---------------4-5-7------------
+			D ------------5-7-----------------
+			A -------5-7-8--------------------
+			D -7-9-10-------------------------
+			
+			---------------------------5-7-9--
+			----------------------5-7-9-------
+			-----------------6-7-9------------
+			------------6-7-9-----------------
+			-------5-7-9----------------------
+			-7-9-11---------------------------
+		""", to:
+			[
+			]
+	
+	it.skip "should parse or throw an error at other tunings", ->
+		expect(->
+			# @FIXME: this actually makes the process hang
+			parse_tabs """
+				G|---------------------------------------------------|
+				D|----------------99------99------77667766-----------|
+				A|-77------77--------11-9----11-9----------777-------|
+				E|----9-7-----9-7------------------------------9777--|
+			"""
+		).to.throw("No music blocks found")
+		# @TODO: better error
+	
+	it "should throw an error when no blocks are found", ->
+		expect(->
+			parse_tabs "(nothing here)"
+		).to.throw("No music blocks found")
+	
+	it "should ignore text above, below, and beside blocks", ->
+		parse """
+			Intro pieces of lard
+			E|2-----2-4-5-4---2-----2-0-
+			B|--3-----------3-----3----- X5
+			G|----2-------------2-------
+			D|-------------------------- (note: play like a b4d@$$)
+			A|-------------------------- (but fairly straightforward)
+			E|--------------------------
+			lryics go "uuuuuuuugh uh pshh um space dinosaurs"
+			yeah sounds legit
+		""", to:
+			[
+				[s: 0, f: 2]
+				[s: 1, f: 3]
+				[s: 2, f: 2]
+				[s: 0, f: 2]
+				[s: 0, f: 4]
+				[s: 0, f: 5]
+				[s: 0, f: 4]
+				[s: 1, f: 3]
+				[s: 0, f: 2]
+				[s: 2, f: 2]
+				[s: 1, f: 3]
+				[s: 0, f: 2]
+				[s: 0, f: 0]
+			]
+	
+	it "should throw an error when a block doesn't line up", ->
+		expect(->
+			parse """
+				e--------------
+				B-1-3-1---------
+				G----------------
+				D----------------
+				A---------------
+				E--------------
+			""", to:
+				[
+					[s: 1, f: 1]
+					[s: 1, f: 3]
+					[s: 1, f: 1]
+				]
+		).to.throw("""
+			e-------------- <<
+			B-1-3-1--------- <<
+			G---------------- <<
+			D---------------- <<
+			A--------------- <<
+			E-------------- <<
+		""")
+	
+	it "should throw a proper error when part of a block doesn't line up but when some text can be ignored", ->
+		expect(->
+			parse_tabs """
+				Intro pieces of lard
+				E|2-----2-4-5-4---2-----2-0-
+				B|--3-----------3-----3-----X5
+				G|----2-------------2-------
+				D|-------------------------- (note: play like a b4d@$$)
+				A|-------------------------- (but fairly straightforward)
+				E|--------------------------
+			"""
+		).to.throw("""
+				E|2-----2-4-5-4---2-----2-0- <<
+				B|--3-----------3-----3-----X5 <<
+				G|----2-------------2------- <<
+				D|-------------------------- << (note: play like a b4d@$$)
+				A|-------------------------- << (but fairly straightforward)
+				E|-------------------------- <<
+		""")
 	
 	it "should handle tabs with multi-digit fret numbers", ->
 		parse """
@@ -246,7 +357,43 @@ describe "the tab parser", ->
 			]
 	
 	it "should throw some other errors"
-	it "should probably always return arrays (i.e. chords of one note)"
+	
+	it "should ignore various articulations like bends and hammer-ons (for now at least)", ->
+		parse """
+			e|--8~------------------------------8---10b11-11b10-10-8----8--13/8-|
+			B|-----10-8-8/10-8-------------8-10----------------------10---------|
+			G|-----------------9-7-5~--5/9--------------------------------------|
+			D|------------------------------------------------------------------|
+			A|------------------------------------------------------------------|
+			E|------------------------------------------------------------------|
+		""", to:
+			[
+				[s: 0, f: 8]
+				[s: 1, f: 10]
+				[s: 1, f: 8]
+				[s: 1, f: 8]
+				[s: 1, f: 10]
+				[s: 1, f: 8]
+				[s: 2, f: 9]
+				[s: 2, f: 7]
+				[s: 2, f: 5]
+				[s: 2, f: 5]
+				[s: 2, f: 9]
+				[s: 1, f: 8]
+				[s: 1, f: 10]
+				[s: 0, f: 8]
+				[s: 0, f: 10]
+				[s: 0, f: 11]
+				[s: 0, f: 11]
+				[s: 0, f: 10]
+				[s: 0, f: 10]
+				[s: 0, f: 8]
+				[s: 1, f: 10]
+				[s: 0, f: 8]
+				[s: 0, f: 13]
+				[s: 0, f: 8]
+			]
+	
 	it "should parse slides by adding a property slideFrom to the second note (both / and \\)"
 	it "should parse hammer-ons by adding a property hammerOn to the second note"
 	it "should parse pull-offs by adding a property pullOff to the second note"

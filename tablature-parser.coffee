@@ -21,9 +21,33 @@ parseTabs = (str)->
 	str.replace EBGDAE, (block)->
 		# console.log "EBGDAE block found:\n#{block}"
 		lines = block.split("\n")
+		
+		min_length = Infinity
+		for line in lines
+			if line.length < min_length
+				min_length = line.length
+		
+		for line in lines
+			if line.length > min_length
+				unless line[min_length] is " "
+					alignment_marker = "<<"
+					throw new Error """
+						Tab interpretation failed due to misalignment:
+						
+						#{(
+							for line in lines
+								if line[min_length] is " "
+									"#{line.slice(0, min_length)} #{alignment_marker}#{line.slice(min_length)}"
+								else
+									"#{line} #{alignment_marker}"
+						).join("\n")}
+					"""
+		
+		lines =
+			for line in lines
+				line.slice(0, min_length)
+		
 		for line, i in lines
-			# if line.length != lines[0].length
-				# @TODO: throw error here
 			
 			m = line.match(/^\s*(\w)\s*(.*)$/)
 			stringName = m[1].toUpperCase()
@@ -32,7 +56,7 @@ parseTabs = (str)->
 			if stringName is "E" and i is 0
 				stringName = "e"
 			
-			noteStrings[stringName] += someNotes # STRING the notes together HAHAHAHAHAHAHAHA um
+			noteStrings[stringName] += someNotes
 		
 		"{...}"
 	
@@ -55,7 +79,7 @@ parseTabs = (str)->
 					stringName = "e"
 				
 				if noteStrings[stringName]?
-					noteStrings[stringName] += someNotes # STRING the notes together HAHAHAHAHAHAHAHA um
+					noteStrings[stringName] += someNotes
 				else
 					console.log "Your guitar is out of tune. #maybe"
 					console.debug AnyBlocks.exec(block)
@@ -87,26 +111,9 @@ parseTabs = (str)->
 	if noteStrings.B.length is 0
 		throw new Error "Tab interpretation failed. (No music blocks found?)"
 	
-	for s, noteString of noteStrings
-		if noteString.length isnt noteStrings.e.length
-			alignment_marker = "<< (this text must line up)"
-			throw new Error """
-				Tab interpretation failed due to misalignment:
-				
-				#{noteStrings.e} #{alignment_marker}
-				#{noteStrings.B} #{alignment_marker}
-				#{noteStrings.G} #{alignment_marker}
-				#{noteStrings.D} #{alignment_marker}
-				#{noteStrings.A} #{alignment_marker}
-				#{noteStrings.E} #{alignment_marker}
-				
-				(Any music blocks found were merged together above.)
-			"""
-			# @TODO: show individual blocks that were uneven instead of the entire concatenated block
-	
 	# heuristically address the ambiguity where
 	# e.g. --12-- can mean either twelve or one then two
-	squishy = not not str.match /[03-9]\d[^\n*]-/
+	squishy = str.match(/[03-9]\d[^\n*]-/)?
 	
 	pos = 0
 	cont = yes
@@ -128,6 +135,7 @@ parseTabs = (str)->
 			if ch?.match(/\d/) or (multi_digit and ch2?.match(/\d/))
 				if ch2?.match(/\d/) and not squishy
 					chord.push
+						# @TODO: this should probably use if ch?.match(/\d/)
 						f: if ch is "-" then parseInt(ch2) else parseInt(ch + ch2)
 						s: tuning.indexOf(s)
 				else
