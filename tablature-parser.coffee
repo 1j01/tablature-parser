@@ -104,62 +104,42 @@ parseTabs = (str)->
 			"""
 			# @TODO: show individual blocks that were uneven instead of the entire concatenated block
 	
+	# heuristically address the ambiguity where
+	# e.g. --12-- can mean either twelve or one then two
+	squishy = not not str.match /[03-9]\d[^\n*]-/
+	
+	pos = 0
+	cont = yes
 	notes = []
-	
-	# address ambiguity (---12--- = "one, two" or "twelve")
-	certainlySquishy = not not str.match /[03-9]\d[^\n*]-/
-	if certainlySquishy
-		# ASSUME --12-- means "one, two"
-		pos = 0
-		cont = yes
-		while cont
-			cont = no
-			for s, noteString of noteStrings
-				ch = noteString[pos]
-				if ch
-					cont = true
-					if ch.match /\d/
-						notes.push
-							f: +ch
-							s: tuning.indexOf(s)
-						
-			pos++
-	
-	else
-		# ASSUME --12-- means a note on the twelth fret
-		# also, group chords[]
-		pos = 0
-		cont = yes
-		while cont
-			cont = no
-			multi_digit = no
-			chord = []
-			
-			for s, noteString of noteStrings
-				ch = noteString[pos]
-				ch2 = noteString[pos+1]
-				cont = yes if ch?
-				multi_digit = yes if ch?.match(/\d/) and ch2?.match(/\d/)
-			
-			for s, noteString of noteStrings
-				ch = noteString[pos]
-				ch2 = noteString[pos+1]
-				if ch?.match(/\d/) or (multi_digit and ch2?.match(/\d/))
-					if ch2?.match(/\d/)
-						chord.push
-							f: if ch is "-" then parseInt(ch2) else parseInt(ch + ch2)
-							s: tuning.indexOf(s)
-					else
-						chord.push
-							f: parseInt(ch)
-							s: tuning.indexOf(s)
-			
-			if chord.length > 0
-				notes.push(chord)
-			
-			pos++
-			pos++ if multi_digit
-	
+	while cont
+		cont = no
+		multi_digit = no
+		chord = []
+		
+		for s, noteString of noteStrings
+			ch = noteString[pos]
+			ch2 = noteString[pos+1]
+			cont = yes if ch?
+			multi_digit = yes if ch?.match(/\d/) and ch2?.match(/\d/) unless squishy
+		
+		for s, noteString of noteStrings
+			ch = noteString[pos]
+			ch2 = noteString[pos+1]
+			if ch?.match(/\d/) or (multi_digit and ch2?.match(/\d/))
+				if ch2?.match(/\d/) and not squishy
+					chord.push
+						f: if ch is "-" then parseInt(ch2) else parseInt(ch + ch2)
+						s: tuning.indexOf(s)
+				else
+					chord.push
+						f: parseInt(ch)
+						s: tuning.indexOf(s)
+		
+		if chord.length > 0
+			notes.push(chord)
+		
+		pos++
+		pos++ if multi_digit
 	
 	if notes.length is 0
 		# this probably shouldn't be an error

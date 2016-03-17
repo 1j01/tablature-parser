@@ -132,9 +132,11 @@ describe "the tab parser", ->
 	it "should parse or throw an error at other tunings"
 	it "should throw an error when no blocks are found"
 	it "should throw an error when a block doesn't line up (or actually... see the next test)"
+	
 	it "should ignore text above, below, and beside blocks"
 	it "should ignore various articulations like bends and hammer-ons (for now at least)"
-	it "should handle tabs with multi-digit numbers", ->
+	
+	it "should handle tabs with multi-digit fret numbers", ->
 		parse """
 			e---15---13-11--------------------11-13------------------
 			B--------------15-11--------13-15-------15---------------
@@ -157,9 +159,52 @@ describe "the tab parser", ->
 				[s: 1, f: 15]
 			]
 	
-	it.skip "should handle tabs with squished together single digit numbers", ->
+	it "should handle tabs with squished together single digit numbers", ->
+		parse """
+			Ievan Polkka (all squished up tho)
+			
+			E -00230032--2300-002300375323000
+			B 0--------33----0---------------
+			G -------------------------------
+			D -------------------------------
+			A -------------------------------
+			E -------------------------------
+		""", to:
+			[
+				[s: 1, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 2]
+				[s: 0, f: 3]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 3]
+				[s: 0, f: 2]
+				[s: 1, f: 3]
+				[s: 1, f: 3]
+				[s: 0, f: 2]
+				[s: 0, f: 3]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 1, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 2]
+				[s: 0, f: 3]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 3]
+				[s: 0, f: 7]
+				[s: 0, f: 5]
+				[s: 0, f: 3]
+				[s: 0, f: 2]
+				[s: 0, f: 3]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+				[s: 0, f: 0]
+			]
 	
-	it "should parse chords with multi-digit numbers", ->
+	it "should parse chords with multi-digit fret numbers", ->
 		parse """
 			 { B   C                           E   F F    }
 			e|--------------------------------------------|
@@ -177,7 +222,7 @@ describe "the tab parser", ->
 				[{s: 4, f: 8},{s: 3, f: 10},{s: 2, f: 10}]
 			]
 	
-	it.skip "should parse chords with squished together single digit numbers", ->
+	it "should parse chords with squished together single digit numbers", ->
 		parse """
 			e-00-000--------------------------------------------------------------------|
 			B—00-000-33-----------------------------------------------------------------|
@@ -187,6 +232,17 @@ describe "the tab parser", ->
 			E-00-000--------------------------------------------------------------------|
 		""", to:
 			[
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 3, f: 0},{s: 2, f: 2},{s: 1, f: 3}]
+				[{s: 3, f: 0},{s: 2, f: 2},{s: 1, f: 3}]
+				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
 			]
 	
 	it "should throw some other errors"
