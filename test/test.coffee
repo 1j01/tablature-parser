@@ -1,9 +1,9 @@
 
-parse_tabs = require "../tablature-parser.coffee"
+Tablature = require "../tablature-parser.coffee"
 {expect} = require "chai"
 
 parse = (tabs, {to: expected_notes})->
-	parsed_notes = parse_tabs(tabs)
+	parsed_notes = Tablature.parse(tabs)
 	try
 		format(parsed_notes)
 		format(expected_notes)
@@ -12,7 +12,7 @@ parse = (tabs, {to: expected_notes})->
 		return
 	expect(format(parsed_notes)).to.eql(format(expected_notes))
 
-describe "the tab parser", ->
+describe "Tablature.parse()", ->
 	
 	it "should parse EADGBe", ->
 		parse """
@@ -162,7 +162,7 @@ describe "the tab parser", ->
 	
 	it "should handle or throw an error at other tunings", ->
 		expect(->
-			parse_tabs """
+			Tablature.parse """
 				e -------------------------5-7-9--
 				B --------------------5-6-8-------
 				G ---------------4-5-7------------
@@ -174,7 +174,7 @@ describe "the tab parser", ->
 	
 	it "should handle or throw an error at bass tablature", ->
 		expect(->
-			parse_tabs """
+			Tablature.parse """
 				G|---------------------------------------------------|
 				D|----------------99------99------77667766-----------|
 				A|-77------77--------11-9----11-9----------777-------|
@@ -184,7 +184,7 @@ describe "the tab parser", ->
 	
 	it "should throw an error when no blocks are found", ->
 		expect(->
-			parse_tabs "(nothing here)"
+			Tablature.parse "(nothing here)"
 		).to.throw("no music blocks found")
 	
 	it "should ignore text above, below, and beside blocks", ->
@@ -241,7 +241,7 @@ describe "the tab parser", ->
 	
 	it "should throw a proper error when part of a block doesn't line up but when some text can be ignored", ->
 		expect(->
-			parse_tabs """
+			Tablature.parse """
 				Intro pieces of lard
 				E|2-----2-4-5-4---2-----2-0-
 				B|--3-----------3-----3-----X5
@@ -420,6 +420,33 @@ describe "the tab parser", ->
 	it "should parse hammer-ons by adding a property hammerOn to the second note"
 	it "should parse pull-offs by adding a property pullOff to the second note"
 	it "should parse vibrato by adding a property vibrato to the note"
+
+describe "Tablature.stringify()", ->
+	
+	it "should output a normalized single row of tablature", ->
+		expect Tablature.stringify [
+			[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			[{s: 3, f: 0},{s: 2, f: 2},{s: 1, f: 3}]
+			[{s: 3, f: 0},{s: 2, f: 2},{s: 1, f: 3}]
+			[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+			[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+			[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+			[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
+		]
+		.to.equal """
+			e|-0-0-0-0-0-------------
+			B|-0-0-0-0-0-3-3---------
+			G|-1-1-1-1-1-2-2-2-2-2-2-
+			D|-2-2-2-2-2-0-0-2-2-2-2-
+			A|-2-2-2-2-2-----0-0-0-0-
+			E|-0-0-0-0-0-------------
+		"""
+	
+	it "should probably have an optional parameter to wrap at a given number of columns"
 
 
 format = (chords)->
