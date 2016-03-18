@@ -348,7 +348,7 @@ describe "Tablature.parse()", ->
 	it "should parse chords with squished together single digit numbers", ->
 		parse """
 			e-00-000--------------------------------------------------------------------|
-			B—00-000-33-----------------------------------------------------------------|
+			B-00-000-33-----------------------------------------------------------------|
 			G-11-111-22—2222------------------------------------------------------------|
 			D-22-222-00-2222------------------------------------------------------------|
 			A-22-222----0000------------------------------------------------------------|
@@ -368,6 +368,23 @@ describe "Tablature.parse()", ->
 				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
 			]
 	
+	it "should assume squishiness even with numbers followed by 2 or more articulation characters", ->
+		# the squishiness regexp had a misplaced asterisk
+		# so it looked past one character for a dash but not 2 or more as intended
+		# Should it actually require a dash after the squished number at all?
+		parse """
+			e-00~~~/-
+			B-00~~~/-
+			G-11~~~/-
+			D-22~~~/-
+			A-22~~~/-
+			E-00~~~/-
+		""", to:
+			[
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+			]
+	
 	it "should allow empty musical compositions", ->
 		parse """
 			"The Misinterpretation of Silence and its Disastrous Consequences" by Type O Negative
@@ -379,7 +396,45 @@ describe "Tablature.parse()", ->
 			-----------------------------------
 			-----------------------------------
 		""", to: []
-
+	
+	it "should support CRLF line endings", ->
+		parse """
+			e|---\r
+			b|-1-\r
+			g|---\r
+			d|---\r
+			a|---\r
+			e|---
+		""", to:
+			[
+				[s: 1, f: 1]
+			]
+		
+	
+	it.skip "should allow some non-ASCII alternative characters", ->
+		parse """
+			Ievan Polkka
+			
+			en dashes:
+			E|––0–0–2–3–0–0–3–2–––––2–3–0–0–––0–0–2–3–0–0–3–7–5–3–2–3–0–0–0–
+			B|0–––––––––––––––––3–3–––––––––0–––––––––––––––––––––––––––––––
+			G|––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			D|––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			A|––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			E|––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			
+			em dashes (seriously not recommended):
+			E|——0—0—2—3—0—0—3—2—————2—3—0—0———0—0—2—3—0—0—3—7—5—3—2—3—0—0—0—
+			B|0—————————————————3—3—————————0———————————————————————————————
+			G|——————————————————————————————————————————————————————————————
+			D|——————————————————————————————————————————————————————————————
+			A|——————————————————————————————————————————————————————————————
+			E|——————————————————————————————————————————————————————————————
+		""", to:
+			[
+			
+			]
+	
 	it "should ignore various articulations like bends and hammer-ons (for now at least)", ->
 		parse """
 			e|--8~------------------------------8---10b11-11b10-10-8----8--13/8-|
