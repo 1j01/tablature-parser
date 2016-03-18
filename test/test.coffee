@@ -115,7 +115,8 @@ describe "the tab parser", ->
 				[s: 1, f: 0]
 			]
 	
-	it.skip "should treat a block with 6 unnamed strings as EADGBe by default", ->
+	it "should treat a block with 6 unnamed strings as EADGBe by default", ->
+		# or as unknown?
 		parse """
 			---
 			-1-
@@ -129,6 +130,7 @@ describe "the tab parser", ->
 			]
 	
 	it.skip "should treat a block with 4 unnamed strings as EADG by default", ->
+		# or as unknown?
 		parse """
 			---
 			-1-
@@ -158,22 +160,32 @@ describe "the tab parser", ->
 			[
 			]
 	
-	it.skip "should parse or throw an error at other tunings", ->
+	it "should handle or throw an error at other tunings", ->
 		expect(->
-			# @FIXME: this actually makes the process hang
+			parse_tabs """
+				e -------------------------5-7-9--
+				B --------------------5-6-8-------
+				G ---------------4-5-7------------
+				D ------------5-7-----------------
+				A -------5-7-8--------------------
+				D -7-9-10-------------------------
+			"""
+		).to.throw("Alternate tunings such as eBGDAD are not supported (yet)")
+	
+	it "should handle or throw an error at bass tablature", ->
+		expect(->
 			parse_tabs """
 				G|---------------------------------------------------|
 				D|----------------99------99------77667766-----------|
 				A|-77------77--------11-9----11-9----------777-------|
 				E|----9-7-----9-7------------------------------9777--|
 			"""
-		).to.throw("No music blocks found")
-		# @TODO: better error
+		).to.throw("Bass tablature is not supported (yet)")
 	
 	it "should throw an error when no blocks are found", ->
 		expect(->
 			parse_tabs "(nothing here)"
-		).to.throw("No music blocks found")
+		).to.throw("no music blocks found")
 	
 	it "should ignore text above, below, and beside blocks", ->
 		parse """
@@ -356,8 +368,6 @@ describe "the tab parser", ->
 				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
 			]
 	
-	it "should throw some other errors"
-	
 	it "should ignore various articulations like bends and hammer-ons (for now at least)", ->
 		parse """
 			e|--8~------------------------------8---10b11-11b10-10-8----8--13/8-|
@@ -412,18 +422,8 @@ format = (chords)->
 					if chord.length > 1 then "{#{props_coffee}}" else props_coffee
 			"[#{note_coffees}]"
 	
-	# if valid
 	"""
 		[
 			#{note_chord_coffees.join "\n\t"}
 		]
 	"""
-	# else
-	# 	JSON.stringify(chords, null, 2)
-
-# i.e. console.log format [[
-#   {
-#     "f": 0
-#     "s": 1
-#   }
-# ]]
