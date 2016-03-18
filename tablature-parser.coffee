@@ -137,10 +137,6 @@ parseTabs = (tablature)->
 		pos++
 		pos++ if multi_digit
 	
-	if notes.length is 0
-		# this probably shouldn't be an error
-		throw new Error "No notes?!?!?!?!?!?? >:("
-	
 	# for s, string of strings
 	# 	console.log s, song.tabs.indexOf(s)
 	# 	if song.tabs.indexOf(s) >= 0

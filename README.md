@@ -2,6 +2,8 @@
 
 A JavaScript tablature parser that parses guitar tabs.
 
+Check out the [tests](test/) for some of the things it can handle.
+
 ## TODO
 
 * Establish and document a decent API
@@ -9,4 +11,4 @@ A JavaScript tablature parser that parses guitar tabs.
 * Parse articulations
 * Support alternate tunings
 * Support other instruments
-* Somehow include the often vague or incorrect timing information
+* Somehow include the vague timing information provided by spacing

@@ -368,6 +368,18 @@ describe "the tab parser", ->
 				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
 			]
 	
+	it "should allow empty musical compositions", ->
+		parse """
+			"The Misinterpretation of Silence and its Disastrous Consequences" by Type O Negative
+			
+			-----------------------------------
+			-----------------------------------
+			-----------------------------------
+			-----------------------------------
+			-----------------------------------
+			-----------------------------------
+		""", to: []
+
 	it "should ignore various articulations like bends and hammer-ons (for now at least)", ->
 		parse """
 			e|--8~------------------------------8---10b11-11b10-10-8----8--13/8-|
