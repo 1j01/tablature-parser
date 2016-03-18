@@ -31,7 +31,7 @@ parseTabs = (tablature)->
 			current_block = null
 	
 	for line in lines
-		if line.indexOf("-") isnt -1
+		if line.match(/[-–—]/)
 			unless current_block
 				current_block = {lines: []}
 				blocks.push current_block
@@ -101,7 +101,7 @@ parseTabs = (tablature)->
 	
 	# heuristically address the ambiguity where
 	# e.g. --12-- can mean either twelve or one then two
-	squishy = tablature.match(/[03-9]\d[^\r\n]*-/)?
+	squishy = tablature.match(/[03-9]\d[^\r\n]*[-–—]/)?
 	
 	pos = 0
 	cont = yes
