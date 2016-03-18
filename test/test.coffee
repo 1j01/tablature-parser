@@ -385,6 +385,22 @@ describe "Tablature.parse()", ->
 				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
 			]
 	
+	it "should parse a single-digit number with an articulation above/or a multi-digit number", ->
+		# I don't know if this is ever good practice in tabbing, but previously it was an error.
+		parse """
+			e-----------
+			B---10------
+			G--5h6------
+			D-----------
+			A-----------
+			E-----------
+		""", to:
+			[
+				[s: 2, f: 5]
+				[{s: 2, f: 6},{s: 1, f: 10}]
+			]
+
+	
 	it "should allow empty musical compositions", ->
 		parse """
 			"The Misinterpretation of Silence and its Disastrous Consequences" by Type O Negative
@@ -409,7 +425,6 @@ describe "Tablature.parse()", ->
 			[
 				[s: 1, f: 1]
 			]
-		
 	
 	it.skip "should allow some non-ASCII alternative characters", ->
 		parse """
