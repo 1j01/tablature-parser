@@ -399,7 +399,32 @@ describe "Tablature.parse()", ->
 				[s: 2, f: 5]
 				[{s: 2, f: 6},{s: 1, f: 10}]
 			]
-
+	
+	it "should not consider leading fret numbers on a tuningless block to be string names", ->
+		parse """
+			----------------------------
+			0-2-3-5-2-3-0-0-2-3-5-2-3-7-
+			----------------------------
+			----------------------------
+			----------------------------
+			0-----------0---------------
+		""", to:
+			[
+				[{s: 5, f: 0}, {s: 1, f: 0}]
+				[s: 1, f: 2]
+				[s: 1, f: 3]
+				[s: 1, f: 5]
+				[s: 1, f: 2]
+				[s: 1, f: 3]
+				[{s: 5, f: 0}, {s: 1, f: 0}]
+				[s: 1, f: 0]
+				[s: 1, f: 2]
+				[s: 1, f: 3]
+				[s: 1, f: 5]
+				[s: 1, f: 2]
+				[s: 1, f: 3]
+				[s: 1, f: 7]
+			]
 	
 	it "should allow empty musical compositions", ->
 		parse """
