@@ -141,7 +141,7 @@ describe "Tablature.parse()", ->
 				[s: 1, f: 1]
 			]
 	
-	it.skip "should treat a block without any string names as the same as any blocks above", ->
+	it.skip "should treat a block without any string names the same as any blocks above", ->
 		parse """
 			e -------------------------5-7-9--
 			B --------------------5-6-8-------
@@ -368,21 +368,18 @@ describe "Tablature.parse()", ->
 				[{s: 4, f: 0},{s: 3, f: 2},{s: 2, f: 2}]
 			]
 	
-	it "should assume squishiness even with numbers followed by 2 or more articulation characters", ->
-		# the squishiness regexp had a misplaced asterisk
-		# so it looked past one character for a dash but not 2 or more as intended
-		# Should it actually require a dash after the squished number at all?
+	it "should assume squishiness from numbers even at the very end of a line", ->
 		parse """
-			e-00~~~/-
-			B-00~~~/-
-			G-11~~~/-
-			D-22~~~/-
-			A-22~~~/-
-			E-00~~~/-
+			e-99
+			B-99
+			G-99
+			D-99
+			A-99
+			E-99
 		""", to:
 			[
-				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
-				[{s: 5, f: 0},{s: 4, f: 2},{s: 3, f: 2},{s: 2, f: 1},{s: 1, f: 0},{s: 0, f: 0}]
+				[{s: 5, f: 9},{s: 4, f: 9},{s: 3, f: 9},{s: 2, f: 9},{s: 1, f: 9},{s: 0, f: 9}]
+				[{s: 5, f: 9},{s: 4, f: 9},{s: 3, f: 9},{s: 2, f: 9},{s: 1, f: 9},{s: 0, f: 9}]
 			]
 	
 	it "should parse a single-digit number with an articulation above/or a multi-digit number", ->
