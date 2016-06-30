@@ -4,6 +4,8 @@ A JavaScript tablature parser that parses guitar tabs.
 
 Check out the [tests](test/) for some of the things it can handle.
 
+Try it out in [Guitar](https://github.com/1j01/guitar), just paste in some tabs.
+
 
 ## 0.x API
 
@@ -38,4 +40,5 @@ returns a normalized single row of tablature as a string.
 * Parse articulations
 * Support alternate tunings
 * Support other instruments
-* Somehow include the vague timing information provided by spacing
+* Somehow include the vague timing information sometimes provided by spacing
+  (other times notes can be spaced based on the lyrics or not spaced at all)
