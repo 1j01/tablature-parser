@@ -39,6 +39,19 @@ For a history of API changes, see [CHANGELOG.md](CHANGELOG.md).
 
 [MIT](LICENSE.txt)
 
+## Development
+
+```bash
+npm install
+npm test:watch
+```
+For publishing, edit CHANGELOG.md, adding/updating version numbers in 5 places, plus a date, and then run:
+```bash
+npm version patch/minor/major
+npm publish
+```
+and push the commit and tag.
+
 ## TODO
 
 * Establish and document a decent API
