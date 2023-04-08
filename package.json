@@ -1,6 +1,6 @@
 {
   "name": "tablature-parser",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "author": "Isaiah Odhner <isaiahodhner@gmail.com>",
   "description": "Parse guitar tabs",
   "license": "MIT",
