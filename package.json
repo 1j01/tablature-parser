@@ -38,7 +38,7 @@
     "prepare": "coffee -o build -c tablature-parser.coffee",
     "prepublishOnly": "npm test && npm run spellcheck",
     "test": "mocha --require coffeescript/register \"test/**/*.{js,coffee}\"",
-    "test:watch": "npm run test -- --watch --watch-extensions js,coffee",
+    "test:watch": "npm run test -- --watch --watch-files \"**/*.coffee\" --watch-extensions js,coffee",
     "lint": "coffeelint tablature-parser.coffee && cspell-cli lint ."
   },
   "devDependencies": {
