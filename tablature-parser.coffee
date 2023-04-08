@@ -152,10 +152,12 @@ parseTabs = (tablature)->
 	return notes
 
 
-paddingLeft = (string="", character, length)->
+paddingLeft = (string, character, length)->
+	string ?= ""
 	(Array(length + 1).join(character) + string).slice(-length)
 
-paddingRight = (string="", character, length)->
+paddingRight = (string, character, length)->
+	string ?= ""
 	(string + Array(length + 1).join(character)).slice(0, length)
 
 
