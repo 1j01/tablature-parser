@@ -1,8 +1,9 @@
 {
   "name": "tablature-parser",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "author": "Isaiah Odhner <isaiahodhner@gmail.com>",
   "description": "Parse guitar tabs",
+  "license": "MIT",
   "keywords": [
     "tablature",
     "tabs",
@@ -29,7 +30,12 @@
   "bugs": {
     "url": "https://github.com/1j01/tablature-parser/issues"
   },
+  "main": "build/tablature-parser.js",
+  "files": [
+    "build"
+  ],
   "scripts": {
+    "prepare": "coffee -o build -c tablature-parser.coffee",
     "test": "mocha --compilers coffee:coffee-script/register",
     "spellcheck": "cspell-cli lint ."
   },

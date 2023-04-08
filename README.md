@@ -35,8 +35,6 @@ returns a normalized single row of tablature as a string.
 ## TODO
 
 * Establish and document a decent API
-* Compile the CoffeeScript in a build step
-* License and publish to npm
 * Parse articulations
 * Support alternate tunings
 * Support other instruments
