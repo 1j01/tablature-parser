@@ -31,6 +31,9 @@ Individual notes are objects with properties `{s, f}`.
 Given a note structure described above,
 returns a normalized single row of tablature as a string.
 
+## Changelog
+
+For a history of API changes, see [CHANGELOG.md](CHANGELOG.md).
 
 ## TODO
 
