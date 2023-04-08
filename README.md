@@ -35,6 +35,10 @@ returns a normalized single row of tablature as a string.
 
 For a history of API changes, see [CHANGELOG.md](CHANGELOG.md).
 
+## License
+
+[MIT](LICENSE.txt)
+
 ## TODO
 
 * Establish and document a decent API
