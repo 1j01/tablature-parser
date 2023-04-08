@@ -55,6 +55,8 @@
 	"words": [
 		"BGDAD",
 		"BGDAE",
+		"coffeelint",
+		"cyclomatic",
 		"EADG",
 		"eadgbe",
 		"EADGBE",
@@ -62,6 +64,8 @@
 		"instanceof",
 		"isnt",
 		"Odhner",
+		"parens",
+		"plusplus",
 		"Polkka",
 		"pshh",
 		"scminput",

@@ -127,28 +127,30 @@ parseTabs = (tablature)->
 		
 		for s, string of strings
 			ch = string[pos]
-			ch2 = string[pos+1]
+			ch2 = string[pos + 1]
 			cont = yes if ch?
 			multi_digit = yes if ch?.match(/\d/) and ch2?.match(/\d/) unless squishy
 		
 		for s, string of strings
 			ch = string[pos]
-			ch2 = string[pos+1]
+			ch2 = string[pos + 1]
 			if ch?.match(/\d/) or (multi_digit and ch2?.match(/\d/))
 				if ch2?.match(/\d/) and not squishy
-					chord.push
+					chord.push {
 						f: if ch?.match(/\d/) then parseInt(ch + ch2) else parseInt(ch2)
 						s: tuning.indexOf(s)
+					}
 				else
-					chord.push
+					chord.push {
 						f: parseInt(ch)
 						s: tuning.indexOf(s)
+					}
 		
 		if chord.length > 0
 			notes.push(chord)
 		
-		pos++
-		pos++ if multi_digit
+		pos += 1
+		pos += 1 if multi_digit
 	
 	return notes
 
@@ -176,9 +178,10 @@ stringifyTabs = (notes, tuning = "eBGDAE")->
 	
 	return strings.join "\n"
 
-Tablature =
+Tablature = {
 	parse: parseTabs
 	stringify: stringifyTabs
+}
 
 if module?
 	module.exports = Tablature
