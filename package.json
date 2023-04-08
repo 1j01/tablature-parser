@@ -36,12 +36,12 @@
   ],
   "scripts": {
     "prepare": "coffee -o build -c tablature-parser.coffee",
-    "test": "mocha --compilers coffee:coffee-script/register",
+    "test": "mocha --compilers coffee:coffeescript/register",
     "spellcheck": "cspell-cli lint ."
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coffee-script": "^1.10.0",
+    "coffeescript": "^2.7.0",
     "mocha": "^2.4.5"
   }
 }
