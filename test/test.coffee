@@ -196,7 +196,7 @@ describe "Tablature.parse()", ->
 			D|-------------------------- (note: play like a b4d@$$)
 			A|-------------------------- (but fairly straightforward)
 			E|--------------------------
-			lryics go "uuuuuuuugh uh pshh um space dinosaurs"
+			lyrics go "uuuuuuuugh uh pshh um space dinosaurs"
 			yeah sounds legit
 		""", to:
 			[

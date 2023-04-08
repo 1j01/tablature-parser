@@ -5,7 +5,6 @@
   "description": "Parse guitar tabs",
   "keywords": [
     "tablature",
-    "tableture",
     "tabs",
     "tab",
     "tab-parser",
@@ -31,7 +30,8 @@
     "url": "https://github.com/1j01/tablature-parser/issues"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register"
+    "test": "mocha --compilers coffee:coffee-script/register",
+    "spellcheck": "cspell-cli lint ."
   },
   "devDependencies": {
     "chai": "^3.5.0",
