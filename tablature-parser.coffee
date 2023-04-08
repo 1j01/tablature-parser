@@ -29,6 +29,7 @@ parseTabs = (tablature)->
 			if current_block.tuning.toUpperCase() is tuning.toUpperCase()
 				current_block.tuning = tuning
 			current_block = null
+		return
 	
 	for line in lines
 		if line.match(/[-–—]/)
@@ -154,11 +155,11 @@ parseTabs = (tablature)->
 
 paddingLeft = (string, character, length)->
 	string ?= ""
-	(Array(length + 1).join(character) + string).slice(-length)
+	return (Array(length + 1).join(character) + string).slice(-length)
 
 paddingRight = (string, character, length)->
 	string ?= ""
-	(string + Array(length + 1).join(character)).slice(0, length)
+	return (string + Array(length + 1).join(character)).slice(0, length)
 
 
 stringifyTabs = (notes, tuning = "eBGDAE")->
@@ -173,7 +174,7 @@ stringifyTabs = (notes, tuning = "eBGDAE")->
 		for string, i in strings
 			strings[i] += "#{paddingRight(notes_here[i], "-", max_length)}-"
 	
-	strings.join "\n"
+	return strings.join "\n"
 
 Tablature =
 	parse: parseTabs
